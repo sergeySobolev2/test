@@ -1,0 +1,111 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Go mod tidy and build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"go mod tidy; go build ./..."
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run migrate main.go",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:DB_HOST='localhost'; $env:DB_PORT='5432'; $env:DB_USER='postgres'; $env:DB_PASS='123'; $env:DB_NAME='dehydration'; go run ./cmd/migrate"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run migrate main.go",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:DB_HOST='localhost'; $env:DB_PORT='5432'; $env:DB_USER='postgres'; $env:DB_PASS='123'; $env:DB_NAME='dehydration'; go run ./cmd/migrate"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run seed main.go",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:DB_HOST='localhost'; $env:DB_PORT='5432'; $env:DB_USER='postgres'; $env:DB_PASS='123'; $env:DB_NAME='dehydration'; go run ./cmd/seed"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run seed main.go",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$env:DB_HOST='localhost'; $env:DB_PORT='5432'; $env:DB_USER='postgres'; $env:DB_PASS='123'; $env:DB_NAME='dehydration'; go run ./cmd/seed"
+			],
+			"problemMatcher": [
+				"$go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run Go server (dev)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"go run ./cmd/main"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Go mod tidy and build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"go mod tidy; go build ./..."
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Go mod tidy and build",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"go mod tidy; go build ./..."
+			],
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}
