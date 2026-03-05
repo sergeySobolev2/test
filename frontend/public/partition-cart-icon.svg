@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <!-- Перегородка (стенка) -->
+  <rect x="6" y="10" width="36" height="32" rx="3" fill="#B0BEC5" stroke="#607D8B" stroke-width="2"/>
+
+  <!-- Ряды блоков -->
+  <line x1="6" y1="18" x2="42" y2="18" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="6" y1="26" x2="42" y2="26" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="6" y1="34" x2="42" y2="34" stroke="#90A4AE" stroke-width="2"/>
+
+  <!-- Вертикальные швы (со сдвигом) -->
+  <line x1="14" y1="10" x2="14" y2="18" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="28" y1="10" x2="28" y2="18" stroke="#90A4AE" stroke-width="2"/>
+
+  <line x1="10" y1="18" x2="10" y2="26" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="22" y1="18" x2="22" y2="26" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="34" y1="18" x2="34" y2="26" stroke="#90A4AE" stroke-width="2"/>
+
+  <line x1="14" y1="26" x2="14" y2="34" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="28" y1="26" x2="28" y2="34" stroke="#90A4AE" stroke-width="2"/>
+
+  <line x1="10" y1="34" x2="10" y2="42" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="22" y1="34" x2="22" y2="42" stroke="#90A4AE" stroke-width="2"/>
+  <line x1="34" y1="34" x2="34" y2="42" stroke="#90A4AE" stroke-width="2"/>
+</svg>

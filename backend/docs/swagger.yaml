@@ -1,0 +1,1171 @@
+basePath: /
+definitions:
+  dehydrotationlab4_internal_app_ds.PartitionRequest:
+    properties:
+      completed_at:
+        type: string
+      created_at:
+        type: string
+      noise_reduction_db:
+        type: number
+      doctor_comment:
+        $ref: '#/definitions/sql.NullString'
+      fluid_deficit:
+        type: number
+      formed_at:
+        type: string
+      id:
+        type: integer
+      moderator:
+        $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+      moderator_id:
+        type: integer
+      patient_weight:
+        type: number
+      status:
+        type: string
+      user:
+        $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+      user_id:
+        type: integer
+    type: object
+  dehydrotationlab4_internal_app_ds.Symptom:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      fluid_need:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      recovery_time:
+        type: string
+      severity:
+        type: string
+      title:
+        type: string
+      weight_loss:
+        type: string
+    type: object
+  dehydrotationlab4_internal_app_ds.User:
+    properties:
+      id:
+        type: integer
+      is_moderator:
+        type: boolean
+      login:
+        type: string
+    type: object
+  sql.NullString:
+    properties:
+      string:
+        type: string
+      valid:
+        description: Valid is true if String is not NULL
+        type: boolean
+    type: object
+host: localhost:8082
+info:
+  contact:
+    email: support@partitionlab.com
+    name: API Support
+  description: |-
+    API для управления заявками на расчет звукоизоляции перегородок
+
+    Без авторизации доступны:
+    - Регистрация и аутентификация
+    - Просмотр симптомов (GET)
+
+    С авторизацией (пользователь):
+    - Управление своими заявками
+    - Добавление симптомов в заявки
+
+    С ролью модератора:
+    - Все методы пользователя
+    - CRUD операции с симптомами
+    - Завершение/отклонение заявок
+  title: Partition Lab API
+  version: "4.0"
+paths:
+  /api/request-symptoms:
+    delete:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Удаляет симптом из черновика заявки. Доступно
+        только владельцу.
+      parameters:
+      - description: Данные для удаления
+        in: body
+        name: request_symptom
+        required: true
+        schema:
+          properties:
+            request_id:
+              type: integer
+            symptom_id:
+              type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  deleted:
+                    type: object
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Удалить симптом из заявки
+      tags:
+      - request-symptoms
+    post:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Добавляет симптом в черновик заявки. Если
+        request_id не указан, создается/используется текущий черновик.
+      parameters:
+      - description: Данные для добавления
+        in: body
+        name: request_symptom
+        required: true
+        schema:
+          properties:
+            request_id:
+              type: integer
+            symptom_id:
+              type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  added:
+                    type: integer
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Добавить симптом в заявку
+      tags:
+      - request-symptoms
+    put:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Обновляет данные связи заявка-симптом (интенсивность,
+        комментарий, признак основного). Доступно только владельцу черновика.
+      parameters:
+      - description: Данные для обновления
+        in: body
+        name: request_symptom
+        required: true
+        schema:
+          properties:
+            comment:
+              type: string
+            intensity:
+              type: integer
+            is_main:
+              type: boolean
+            request_id:
+              type: integer
+            symptom_id:
+              type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  updated:
+                    type: integer
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Обновить данные симптома в заявке
+      tags:
+      - request-symptoms
+  /api/requests:
+    get:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Обычный пользователь видит только свои заявки.
+        Модератор видит все заявки.
+      parameters:
+      - description: Фильтр по статусу
+        in: query
+        name: status
+        type: string
+      - description: Дата начала (formed_at)
+        in: query
+        name: from
+        type: string
+      - description: Дата окончания (formed_at)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                items:
+                  type: object
+                type: array
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Получить список заявок
+      tags:
+      - requests
+  /api/requests/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Доступно только создателю заявки.
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  deleted:
+                    type: integer
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Удалить заявку
+      tags:
+      - requests
+    get:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Возвращает заявку с симптомами.
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Получить заявку по ID
+      tags:
+      - requests
+    put:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Доступно только владельцу черновика.
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновляемые поля
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            doctor_comment:
+              type: string
+            patient_weight:
+              format: float64
+              type: number
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.PartitionRequest'
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Обновить заявку
+      tags:
+      - requests
+  /api/requests/{id}/complete:
+    put:
+      consumes:
+      - application/json
+      description: Требуется авторизация модератора. Переводит заявку в статус "завершен"
+        или "отклонен".
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные для завершения
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            noise_reduction_db:
+              format: float64
+              type: number
+            doctor_comment:
+              type: string
+            patient_weight:
+              format: float64
+              type: number
+            status:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.PartitionRequest'
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Завершить или отклонить заявку
+      tags:
+      - requests
+  /api/requests/{id}/form:
+    put:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Переводит черновик в статус "сформирован".
+        Доступно только владельцу.
+      parameters:
+      - description: ID заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.PartitionRequest'
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Сформировать заявку
+      tags:
+      - requests
+  /api/requests/cart:
+    get:
+      consumes:
+      - application/json
+      description: Требуется авторизация. Возвращает ID черновика и количество симптомов
+        в нем.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  count:
+                    type: integer
+                  draft_id:
+                    type: integer
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Получить корзину
+      tags:
+      - requests
+  /api/symptoms:
+    get:
+      consumes:
+      - application/json
+      description: Доступно без авторизации. Можно фильтровать по названию и статусу
+        активности.
+      parameters:
+      - description: Фильтр по названию симптома
+        in: query
+        name: title
+        type: string
+      - description: Фильтр по активности (true/false)
+        in: query
+        name: active
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                items:
+                  properties:
+                    description:
+                      type: string
+                    id:
+                      type: integer
+                    image_url:
+                      type: string
+                    is_active:
+                      type: boolean
+                    public_image_url:
+                      type: string
+                    severity:
+                      type: string
+                    title:
+                      type: string
+                  type: object
+                type: array
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+      summary: Получить список симптомов
+      tags:
+      - symptoms
+    post:
+      consumes:
+      - application/json
+      description: Доступно только модераторам
+      parameters:
+      - description: Данные симптома
+        in: body
+        name: symptom
+        required: true
+        schema:
+          $ref: '#/definitions/dehydrotationlab4_internal_app_ds.Symptom'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.Symptom'
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Создать новый симптом
+      tags:
+      - symptoms
+  /api/symptoms/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Доступно только модераторам
+      parameters:
+      - description: ID симптома
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  deleted:
+                    type: integer
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Удалить симптом
+      tags:
+      - symptoms
+    get:
+      consumes:
+      - application/json
+      description: Доступно без авторизации
+      parameters:
+      - description: ID симптома
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  public_image_url:
+                    type: string
+                  symptom:
+                    $ref: '#/definitions/dehydrotationlab4_internal_app_ds.Symptom'
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Получить симптом по ID
+      tags:
+      - symptoms
+    put:
+      consumes:
+      - application/json
+      description: Доступно только модераторам
+      parameters:
+      - description: ID симптома
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновленные данные симптома
+        in: body
+        name: symptom
+        required: true
+        schema:
+          $ref: '#/definitions/dehydrotationlab4_internal_app_ds.Symptom'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.Symptom'
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Обновить симптом
+      tags:
+      - symptoms
+  /api/symptoms/{id}/image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Доступно только модераторам
+      parameters:
+      - description: ID симптома
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Файл изображения
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              data:
+                properties:
+                  image_key:
+                    type: string
+                  public_url:
+                    type: string
+                type: object
+              filters:
+                type: object
+              total:
+                type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Загрузить изображение для симптома
+      tags:
+      - symptoms
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные для входа
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            login:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              session_id:
+                type: string
+              token:
+                type: string
+              user:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Вход пользователя
+      tags:
+      - auth
+  /api/users/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              message:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Выход пользователя
+      tags:
+      - auth
+  /api/users/profile:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              user:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Получение профиля текущего пользователя
+      tags:
+      - auth
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Новые данные профиля
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            login:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              user:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+      - CookieAuth: []
+      summary: Обновление профиля
+      tags:
+      - auth
+  /api/users/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            login:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              user:
+                $ref: '#/definitions/dehydrotationlab4_internal_app_ds.User'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Регистрация нового пользователя
+      tags:
+      - auth
+securityDefinitions:
+  BearerAuth:
+    description: 'Введите JWT токен в формате: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
+  CookieAuth:
+    description: Сессия через cookie (session_id)
+    in: header
+    name: Cookie
+    type: apiKey
+swagger: "2.0"

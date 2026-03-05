@@ -1,0 +1,143 @@
+:root {
+  --bs-primary: #3a5a90;
+  --bs-secondary: #7a8aa6;
+  --bs-success: #2f8a7a;
+  --bs-info: #2f6f7e;
+  --bs-warning: #e4a11b;
+  --bs-danger: #c35353;
+  --bs-light: #f7f9fc;
+  --bs-dark: #1f2a33;
+  --bs-body-bg: #f3f5f8;
+  --bs-body-color: #1f2937;
+  --bs-link-color: #3a5a90;
+  --bs-link-hover-color: #2f4b7a;
+  --bs-border-color: #d2d8e2;
+}
+
+body {
+  font-family: "Manrope", "Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+a {
+  color: var(--bs-link-color);
+}
+
+a:hover {
+  color: var(--bs-link-hover-color);
+}
+
+.navbar {
+  background-color: #2f4b7a !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 18px rgba(31, 42, 51, 0.18);
+}
+
+.container,
+.container-fluid {
+  --bs-gutter-x: 1.75rem;
+}
+
+.container {
+  max-width: 1240px;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  border-radius: 12px;
+  padding: 0.55rem 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #314c7a;
+  border-color: #314c7a;
+}
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-danger,
+.btn-outline-info {
+  border-radius: 12px;
+}
+
+.form-control,
+.form-select {
+  border-radius: 12px;
+  border-color: var(--bs-border-color);
+  padding: 0.55rem 0.9rem;
+}
+
+.card {
+  border-color: var(--bs-border-color);
+  border-radius: 18px;
+  box-shadow: 0 14px 28px rgba(31, 42, 51, 0.08);
+}
+
+.card-body {
+  padding: 1.4rem 1.5rem;
+}
+
+.row {
+  --bs-gutter-x: 1.9rem;
+  --bs-gutter-y: 1.4rem;
+}
+
+.floating-cart {
+  z-index: 1000;
+  text-decoration: none;
+  margin: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.floating-cart img {
+  cursor: pointer;
+}
+
+.partition-detail-img {
+  max-height: 440px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table thead th {
+  background-color: #eef2f7;
+}
+
+.badge {
+  border-radius: 10px;
+  padding: 0.35rem 0.55rem;
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .floating-cart {
+    margin: 0.75rem;
+  }
+
+  .floating-cart img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .partition-detail-img {
+    max-height: 260px;
+  }
+}

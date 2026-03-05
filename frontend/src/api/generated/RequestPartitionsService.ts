@@ -1,0 +1,1 @@
+export { RequestPartitionsService } from './RequestSymptomsService'

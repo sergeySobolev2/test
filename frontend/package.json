@@ -1,0 +1,41 @@
+{
+  "name": "partition-soundproofing-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:https": "set VITE_HTTPS=true&& vite",
+    "cert:setup": "powershell -ExecutionPolicy Bypass -File scripts/setup-cert.ps1",
+    "dev:tauri": "set VITE_HTTPS=true&& vite --mode tauri --host 127.0.0.1 --port 5197",
+    "build": "tsc -b && vite build",
+    "build:tauri": "tsc -b && vite build --mode tauri",
+    "preview": "vite preview",
+    "preview:https": "set VITE_HTTPS=true&& vite preview",
+    "deploy": "set VITE_BASE=/test/&& npm run build && gh-pages -d dist",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.7",
+    "bootstrap": "^5.3.3",
+    "axios": "^1.7.7",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.4",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.9.5",
+    "@types/node": "^22.7.5",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "openapi-typescript-codegen": "^0.27.0",
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vite-plugin-pwa": "^0.20.5"
+  }
+}
