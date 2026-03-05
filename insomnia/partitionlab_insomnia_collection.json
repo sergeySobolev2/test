@@ -1,0 +1,163 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-02-02T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app",
+  "resources": [
+    {
+      "_id": "wrk_partitionlab",
+      "_type": "workspace",
+      "name": "PartitionLab API",
+      "description": "Регистрация/логин/заявки/async"
+    },
+    {
+      "_id": "env_partitionlab",
+      "_type": "environment",
+      "parentId": "wrk_partitionlab",
+      "name": "Base Env",
+      "data": {
+        "base_url": "http://localhost:8082",
+        "async_url": "http://127.0.0.1:8083",
+        "token": "",
+        "service_token": "async-partition-soundproof-key",
+        "calculation_id": 1
+      }
+    },
+    {
+      "_id": "req_register",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Register",
+      "method": "POST",
+      "url": "{{ base_url }}/api/users/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"user1\",\n  \"password\": \"123456\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ base_url }}/api/users/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"user1\",\n  \"password\": \"123456\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_profile",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Profile",
+      "method": "GET",
+      "url": "{{ base_url }}/api/users/profile",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ]
+    },
+    {
+      "_id": "req_partitions",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "List Partitions",
+      "method": "GET",
+      "url": "{{ base_url }}/api/partitions",
+      "headers": [
+        { "name": "Accept", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_add_partition",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Add Partition to Draft",
+      "method": "POST",
+      "url": "{{ base_url }}/api/request-partitions",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"partition_id\": 1\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ]
+    },
+    {
+      "_id": "req_cart",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Cart",
+      "method": "GET",
+      "url": "{{ base_url }}/api/requests/cart",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ]
+    },
+    {
+      "_id": "req_form",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Form Draft",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/requests/{{ calculation_id }}/form",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ]
+    },
+    {
+      "_id": "req_trigger_async",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Trigger Async Calculation (backend)",
+      "method": "POST",
+      "url": "{{ base_url }}/api/requests/{{ calculation_id }}/calculate",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"room_area\": 20.5\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ]
+    },
+    {
+      "_id": "req_async_service",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Async Service Calculate (Rust)",
+      "method": "POST",
+      "url": "{{ async_url }}/calculate",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"calculation_id\": {{ calculation_id }},\n  \"room_area\": 20.5\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_async_result",
+      "_type": "request",
+      "parentId": "wrk_partitionlab",
+      "name": "Async Result (backend)",
+      "method": "POST",
+      "url": "{{ base_url }}/api/async/result",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"calculation_id\": {{ calculation_id }},\n  \"noise_reduction_db\": 33.5,\n  \"room_area\": 20.5,\n  \"service_token\": \"{{ service_token }}\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    }
+  ]
+}

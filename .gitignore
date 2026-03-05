@@ -1,0 +1,25 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Node
+**/node_modules/
+**/dist/
+
+# Rust
+**/target/
+
+# Go binaries
+*.exe
+*.out
+
+# Logs
+*.log

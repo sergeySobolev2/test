@@ -1,0 +1,219 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-02-04T19:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_partition",
+      "_type": "workspace",
+      "name": "Partition Soundproofing",
+      "description": "API для системы звукоизоляции перегородок"
+    },
+    {
+      "_id": "env_partition_base",
+      "_type": "environment",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8082",
+        "async_url": "http://localhost:8083",
+        "token": ""
+      },
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_register",
+      "_type": "request",
+      "name": "Регистрация",
+      "method": "POST",
+      "url": "{{ base_url }}/api/users/register",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"testuser\",\n  \"password\": \"123456\"\n}"
+      },
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "name": "Логин",
+      "method": "POST",
+      "url": "{{ base_url }}/api/users/login",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"user1\",\n  \"password\": \"123456\"\n}"
+      },
+      "description": "После успешного логина скопируйте токен из ответа (поле 'token') и сохраните в переменную окружения 'token'",
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_get_partitions",
+      "_type": "request",
+      "name": "Получить список перегородок",
+      "method": "GET",
+      "url": "{{ base_url }}/api/partitions",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_create_calculation",
+      "_type": "request",
+      "name": "Создать заявку (черновик)",
+      "method": "POST",
+      "url": "{{ base_url }}/api/request-partitions",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"partition_id\": 27\n}"
+      },
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_get_calculations",
+      "_type": "request",
+      "name": "Получить список заявок",
+      "method": "GET",
+      "url": "{{ base_url }}/api/calculations",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_trigger_calculation",
+      "_type": "request",
+      "name": "Запустить расчет снижения шума",
+      "method": "POST",
+      "url": "{{ base_url }}/api/requests/1/calculate",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"room_area\": 25.5\n}"
+      },
+      "description": "Отправляет запрос на асинхронный расчет. Нужно указать:\n- room_area: площадь помещения в м²\n\nАсинхронный сервис рассчитает noise_reduction_db по формуле:\nnoise_reduction_db = clamp(20 + sqrt(room_area) * 5, 20, 60)\n\nРезультат появится через ~5 секунд и будет виден в списке заявок",
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_async_direct",
+      "_type": "request",
+      "name": "[Прямой] Запрос к async сервису",
+      "method": "POST",
+      "url": "{{ async_url }}/calculate",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"calculation_id\": 1,\n  \"room_area\": 25.5\n}"
+      },
+      "description": "⚠️ Это прямой запрос к Rust async сервису (обычно не используется напрямую)\n\nИспользуйте вместо этого: 'Запустить расчет снижения шума' - он автоматически вызовет async сервис через backend",
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_async_result",
+      "_type": "request",
+      "name": "[Внутренний] Отправить результат от async сервиса",
+      "method": "POST",
+      "url": "{{ base_url }}/api/async/result",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"calculation_id\": 1,\n  \"noise_reduction_db\": 45.2,\n  \"room_area\": 25.5,\n  \"service_token\": \"async-partition-soundproof-key\"\n}"
+      },
+      "description": "⚠️ Это внутренний endpoint для async сервиса!\n\nОбычно вызывается автоматически Rust сервисом после расчета.\n\nservice_token должен быть: async-partition-soundproof-key",
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_form_calculation",
+      "_type": "request",
+      "name": "Сформировать заявку",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/requests/1/form",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "description": "Изменяет статус заявки с 'черновик' на 'сформирован'",
+      "parentId": "wrk_partition"
+    },
+    {
+      "_id": "req_complete_calculation",
+      "_type": "request",
+      "name": "[Модератор] Завершить/отклонить заявку",
+      "method": "POST",
+      "url": "{{ base_url }}/api/requests/1/complete",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"завершен\",\n  \"room_area\": 30.0,\n  \"noise_reduction_db\": 42.5\n}"
+      },
+      "description": "Модератор может завершить или отклонить заявку.\n\nДля завершения нужны:\n- status: 'завершен'\n- room_area: площадь помещения\n- noise_reduction_db: снижение шума\n\nДля отклонения:\n- status: 'отклонен'\n- expert_comment: комментарий (опционально)",
+      "parentId": "wrk_partition"
+    }
+  ]
+}
